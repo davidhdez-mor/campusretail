@@ -1,0 +1,40 @@
+version: 3.9
+
+services:
+  user-service:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: "userdb"
+    ports:
+      - "14033:1433"
+    volumes:
+      - ./volumes/sql/user/data:/var/opt/mssql/data
+      - ./volumes/sql/user/data:/var/opt/mssql/log
+      - ./volumes/sql/user/data:/var/opt/mssql/secrets
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "MySuperSafePassword#"
+
+  order-service:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: "orderdb"
+    ports:
+      - "14034:1433"
+    volumes:
+      - ./volumes/sql/order/data:/var/opt/mssql/data
+      - ./volumes/sql/order/data:/var/opt/mssql/log
+      - ./volumes/sql/order/data:/var/opt/mssql/secrets
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "MySuperSafePassword#"
+
+  product-catalog-service:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: "product-catalogdb" ports: - "14035:1433"
+    volumes:
+      - ./volumes/sql/product-catalog/data:/var/opt/mssql/data
+      - ./volumes/sql/product-catalog/data:/var/opt/mssql/log
+      - ./volumes/sql/product-catalog/data:/var/opt/mssql/secrets
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "MySuperSafePassword#"
+
