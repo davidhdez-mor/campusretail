@@ -30,7 +30,8 @@ services:
   product-catalog-service:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: "product-catalogdb"
-    ports: - "14035:1433"
+    ports:
+      - "14035:1433"
     volumes:
       - ./volumes/sql/product-catalog/data:/var/opt/mssql/data
       - ./volumes/sql/product-catalog/data:/var/opt/mssql/log
