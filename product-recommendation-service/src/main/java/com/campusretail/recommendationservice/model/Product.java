@@ -1,7 +1,6 @@
 package com.campusretail.recommendationservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 

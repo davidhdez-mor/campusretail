@@ -35,6 +35,22 @@ public class UserDetails {
     private User user;
 
 	public UserDetails() {
+
+	}
+
+	public UserDetails(Long id, String firstName, String lastName, String email, String phoneNumber, String street, String streetNumber, String zipCode, String locality, String country, User user) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.street = street;
+		this.streetNumber = streetNumber;
+		this.zipCode = zipCode;
+		this.locality = locality;
+		this.country = country;
+		this.user = user;
 	}
 
 	public Long getId() {

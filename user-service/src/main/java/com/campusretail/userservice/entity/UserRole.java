@@ -1,7 +1,6 @@
 package com.campusretail.userservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import javax.persistence.*;
 import java.util.List;
 
@@ -21,6 +20,14 @@ public class UserRole {
     private List<User> users;
 
 	public UserRole() {
+
+	}
+
+	public UserRole(Long id, String roleName, List<User> users) {
+		super();
+		this.id = id;
+		this.roleName = roleName;
+		this.users = users;
 	}
 
 	public Long getId() {

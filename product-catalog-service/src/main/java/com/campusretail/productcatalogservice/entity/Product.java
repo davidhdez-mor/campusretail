@@ -1,6 +1,7 @@
 package com.campusretail.productcatalogservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ public class Product {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+	//TODO checar la libreria apropiada para implementar NotNull en los Beans necesarios
     @Column (name = "product_name")
     @NotNull
     private String productName;
@@ -35,6 +37,15 @@ public class Product {
 
 	public Product() {
 
+	}
+
+	public Product(Long id, String productName, BigDecimal price, String discription, String category, int availability) {
+		this.id = id;
+		this.productName = productName;
+		this.price = price;
+		this.discription = discription;
+		this.category = category;
+		this.availability = availability;
 	}
 
 	public Long getId() {

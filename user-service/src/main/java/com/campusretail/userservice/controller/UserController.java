@@ -48,6 +48,7 @@ public class UserController {
         		HttpStatus.NOT_FOUND);
     }
 
+	// TODO Revisar método getUsersById
     @GetMapping (value = "/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
         User user = userService.getUserById(id);

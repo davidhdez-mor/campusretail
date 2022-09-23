@@ -1,7 +1,7 @@
 package com.campusretail.orderservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Table (name = "items")
-@EqualsAndHashCode
 public class Item {
 	
     @Id
@@ -17,6 +16,7 @@ public class Item {
     @JsonIgnore
     private Long id;
 
+	//TODO checar la libreria apropiada para implementar NotNull en los Beans necesarios
     @Column (name = "quantity")
     @NotNull
     private int quantity;
