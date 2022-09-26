@@ -1,7 +1,7 @@
 package com.campusretail.userservice.dto;
 
 public class ReadUserDto {
-	private Long roleId;
+	private Long id;
 	private String userName;
 	
 	private String roleName;
@@ -10,20 +10,20 @@ public class ReadUserDto {
 
 	}
 
-	public ReadUserDto(Long roleId, String userName, String roleName) {
-		this.roleId = roleId;
+	public ReadUserDto(Long id, String userName, String roleName) {
+		this.id = id;
 		this.userName = userName;
 		this.roleName = roleName;
 	}
 
-	public Long getRoleId() {
-		return roleId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
+	public void setId(Long id) {
+		this.id = id;
 	}
-	
+
 	public String getUserName() {
 		return userName;
 	}

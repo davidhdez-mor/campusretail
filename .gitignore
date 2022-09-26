@@ -1,4 +1,6 @@
 HELP.md
+*.http
+.gitignore
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 .mvn

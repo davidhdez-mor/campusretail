@@ -1,5 +1,6 @@
 package com.campusretail.userservice.controller;
 
+import com.campusretail.userservice.dto.ReadUserDto;
 import com.campusretail.userservice.entity.User;
 import com.campusretail.userservice.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller which manage all the user actions into the database
@@ -32,9 +34,13 @@ public class UserController {
 	 *
 	 * @return A collection of users or an HTTP not found response
 	 */
-	@GetMapping(value = "/users")
-	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> users = userService.getAllUsers();
+	@GetMapping("/users")
+	public ResponseEntity<List<ReadUserDto>> getAllUsers() {
+		
+		List<ReadUserDto> users = userService.getAllUsers()
+				.stream()
+				.map(user -> this.modelMapper.map(user, ReadUserDto.class))
+				.collect(Collectors.toList());
 		if (!users.isEmpty()) {
 			return new ResponseEntity<>(users, HttpStatus.OK);
 		}
@@ -48,8 +54,8 @@ public class UserController {
 	 * @return a User or an HTTP not found status
 	 */
 	@GetMapping(value = "/users", params = "name")
-	public ResponseEntity<User> getUserByName(@RequestParam("name") String userName) {
-		User user = userService.getUserByName(userName);
+	public ResponseEntity<ReadUserDto> getUserByName(@RequestParam("name") String userName) {
+		ReadUserDto user = this.modelMapper.map(userService.getUserByName(userName), ReadUserDto.class);
 		if (user != null) {
 			return new ResponseEntity<>(user, HttpStatus.OK);
 		}
@@ -62,9 +68,9 @@ public class UserController {
 	 * @param id requested int id of the user
 	 * @return a User or an HTTP not found status
 	 */
-	@GetMapping(value = "/users/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-		User user = userService.getUserById(id);
+	@GetMapping("/users/{id}")
+	public ResponseEntity<ReadUserDto> getUserById(@PathVariable("id") Long id) {
+		ReadUserDto user = this.modelMapper.map(userService.getUserById(id), ReadUserDto.class);
 		if (user != null) {
 			return new ResponseEntity<>(user, HttpStatus.OK);
 		}
