@@ -3,6 +3,11 @@ package com.campusretail.userservice.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
+/**
+ * Class used to set all the properties 
+ * of the user as table in the database
+ */
+
 @Entity
 @Table (name = "users_details")
 public class UserDetails {
@@ -39,7 +44,6 @@ public class UserDetails {
 	}
 
 	public UserDetails(Long id, String firstName, String lastName, String email, String phoneNumber, String street, String streetNumber, String zipCode, String locality, String country, User user) {
-		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;

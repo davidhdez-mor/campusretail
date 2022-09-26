@@ -8,7 +8,12 @@ import java.util.List;
 @Table (name = "user_role")
 public class UserRole {
 
-    @Id
+	/**
+	 * Class used to set the roles 
+	 * of the users as table in the database
+	 */
+
+	@Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,7 +29,6 @@ public class UserRole {
 	}
 
 	public UserRole(Long id, String roleName, List<User> users) {
-		super();
 		this.id = id;
 		this.roleName = roleName;
 		this.users = users;

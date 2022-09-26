@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
+/**
+ * Class to create the entity of User with its attributes
+ */
+
 @Entity
 @Table (name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
