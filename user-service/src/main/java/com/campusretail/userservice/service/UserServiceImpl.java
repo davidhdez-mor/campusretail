@@ -5,10 +5,13 @@ import com.campusretail.userservice.entity.UserRole;
 import com.campusretail.userservice.repository.UserRepository;
 import com.campusretail.userservice.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Implementation of the service interface, using
@@ -23,33 +26,41 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	private final UserRoleRepository userRoleRepository;
+	
+	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+	public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.userRoleRepository = userRoleRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	@Async("threadPoolExecutor")
+	public CompletableFuture<List<User>> getAllUsers() {
+		return CompletableFuture.completedFuture(userRepository.findAll());
 	}
 
 	@Override
-	public User getUserById(Long id) {
-		return userRepository.findById(id).orElse(null);
+	@Async("threadPoolExecutor")
+	public CompletableFuture<User> getUserById(Long id) {
+		return CompletableFuture.completedFuture(userRepository.findById(id).orElse(null));
 	}
 
 	@Override
-	public User getUserByName(String userName) {
-		return userRepository.findByUserName(userName);
+	@Async("threadPoolExecutor")
+	public CompletableFuture<User> getUserByName(String userName) {
+		return CompletableFuture.completedFuture(userRepository.findByUserName(userName));
 	}
 
 	@Override
-	public User saveUser(User user) {
+	@Async("threadPoolExecutor")
+	public CompletableFuture<User> saveUser(User user) {
+		user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 		user.setActive(1);
 		UserRole role = userRoleRepository.findUserRoleByRoleName("User");
 		user.setRole(role);
-		return userRepository.save(user);
+		return CompletableFuture.completedFuture(userRepository.save(user));
 	}
 }

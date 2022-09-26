@@ -1,28 +1,29 @@
 package com.campusretail.userservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table (name = "user_role")
+@Table(name = "user_role")
 public class UserRole {
 
 	/**
-	 * Class used to set the roles 
+	 * Class used to set the roles
 	 * of the users as table in the database
 	 */
 
 	@Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column (name = "role_name")
-    private String roleName;
+	@Column(name = "role_name")
+	private String roleName;
 
-    @OneToMany (mappedBy = "role")
-    @JsonIgnore
-    private List<User> users;
+	@OneToMany(mappedBy = "role")
+	@JsonIgnore
+	private List<User> users;
 
 	public UserRole() {
 
