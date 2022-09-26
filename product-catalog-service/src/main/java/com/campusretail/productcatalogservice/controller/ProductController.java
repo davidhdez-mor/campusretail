@@ -1,7 +1,6 @@
 package com.campusretail.productcatalogservice.controller;
 
 import com.campusretail.productcatalogservice.entity.Product;
-import com.campusretail.productcatalogservice.http.header.HeaderGenerator;
 import com.campusretail.productcatalogservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,23 +11,22 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
-    
-    @Autowired
-    private HeaderGenerator headerGenerator;
+    private final ProductService productService;
+	
+	@Autowired
+	public ProductController(ProductService productService) {
+		this.productService = productService;
+	}
 
     @GetMapping (value = "/products")
     public ResponseEntity<List<Product>> getAllProducts(){
         List<Product> products =  productService.getAllProduct();
         if(!products.isEmpty()) {
-        	return new ResponseEntity<List<Product>>(
+        	return new ResponseEntity<>(
         			products,
-        			headerGenerator.getHeadersForSuccessGetMethod(),
         			HttpStatus.OK);
         }
-        return new ResponseEntity<List<Product>>(
-        		headerGenerator.getHeadersForError(),
+        return new ResponseEntity<>(
         		HttpStatus.NOT_FOUND);       
     }
 
@@ -36,13 +34,11 @@ public class ProductController {
     public ResponseEntity<List<Product>> getAllProductByCategory(@RequestParam ("category") String category){
         List<Product> products = productService.getAllProductByCategory(category);
         if(!products.isEmpty()) {
-        	return new ResponseEntity<List<Product>>(
+        	return new ResponseEntity<>(
         			products,
-        			headerGenerator.getHeadersForSuccessGetMethod(),
         			HttpStatus.OK);
         }
-        return new ResponseEntity<List<Product>>(
-        		headerGenerator.getHeadersForError(),
+        return new ResponseEntity<>(
         		HttpStatus.NOT_FOUND);
     }
 
@@ -50,13 +46,11 @@ public class ProductController {
     public ResponseEntity<Product> getOneProductById(@PathVariable ("id") long id){
         Product product =  productService.getProductById(id);
         if(product != null) {
-        	return new ResponseEntity<Product>(
+        	return new ResponseEntity<>(
         			product,
-        			headerGenerator.getHeadersForSuccessGetMethod(),
         			HttpStatus.OK);
         }
-        return new ResponseEntity<Product>(
-        		headerGenerator.getHeadersForError(),
+        return new ResponseEntity<>(
         		HttpStatus.NOT_FOUND);
     }
 
@@ -64,13 +58,11 @@ public class ProductController {
     public ResponseEntity<List<Product>> getAllProductsByName(@RequestParam ("name") String name){
         List<Product> products =  productService.getAllProductsByName(name);
         if(!products.isEmpty()) {
-        	return new ResponseEntity<List<Product>>(
+        	return new ResponseEntity<>(
         			products,
-        			headerGenerator.getHeadersForSuccessGetMethod(),
         			HttpStatus.OK);
         }
-        return new ResponseEntity<List<Product>>(
-        		headerGenerator.getHeadersForError(),
+        return new ResponseEntity<>(
         		HttpStatus.NOT_FOUND);
     }
 }

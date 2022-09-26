@@ -5,45 +5,44 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
-@Entity
-@Table (name = "products")
+@Entity(name = "products")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
 
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	//TODO checar la libreria apropiada para implementar NotNull en los Beans necesarios
-    @Column (name = "product_name")
-    @NotNull
-    private String productName;
+	@Column(name = "product_name")
+	@NotNull
+	private String productName;
 
-    @Column (name = "price")
-    @NotNull
-    private BigDecimal price;
+	@Column(name = "price")
+	@NotNull
+	private BigDecimal price;
 
-    @Column (name = "discription")
-    private String discription;
+	@Column(name = "description")
+	private String description;
 
-    @Column (name = "category")
-    @NotNull
-    private String category;
+	@ManyToMany
+	@JoinColumn(name = "category_id")
+	private List<Category> category;
 
-    @Column (name = "availability")
-    @NotNull
-    private int availability;
+	@Column(name = "availability")
+	@NotNull
+	private int availability;
 
 	public Product() {
 
 	}
 
-	public Product(Long id, String productName, BigDecimal price, String discription, String category, int availability) {
+	public Product(Long id, String productName, BigDecimal price, String description, List<Category> category, int availability) {
 		this.id = id;
 		this.productName = productName;
 		this.price = price;
-		this.discription = discription;
+		this.description = description;
 		this.category = category;
 		this.availability = availability;
 	}
@@ -72,19 +71,19 @@ public class Product {
 		this.price = price;
 	}
 
-	public String getDiscription() {
-		return discription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public String getCategory() {
+	public List<Category> getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(List<Category> category) {
 		this.category = category;
 	}
 
@@ -94,5 +93,5 @@ public class Product {
 
 	public void setAvailability(int availability) {
 		this.availability = availability;
-	} 
+	}
 }
