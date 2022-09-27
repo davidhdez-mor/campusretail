@@ -1,9 +1,13 @@
 package com.campusretail.userservice.dto;
 
+/**
+ * DTO class to show only the wanted
+ * information about the user class
+ */
+
 public class ReadUserDto {
 	private Long id;
 	private String userName;
-	
 	private String roleName;
 
 	public ReadUserDto() {

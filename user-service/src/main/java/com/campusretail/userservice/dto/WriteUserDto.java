@@ -1,5 +1,10 @@
 package com.campusretail.userservice.dto;
 
+/**
+ * DTO class to only request the escential
+ * information when we want to create a user
+ */
+
 public class WriteUserDto {
 	
 	private Long roleId;
