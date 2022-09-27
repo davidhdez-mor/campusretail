@@ -11,16 +11,17 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductService service;
+	
 	
 	@Autowired
-	public ProductController(ProductService productService) {
-		this.productService = productService;
+	public ProductController(ProductService service) {
+		this.service = service;
 	}
 
     @GetMapping (value = "/products")
-    public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> products =  productService.getAllProduct();
+    public ResponseEntity<List<Product>> getAllProducts() throws Exception{
+        List<Product> products = this.service.getAllProduct().get();
         if(!products.isEmpty()) {
         	return new ResponseEntity<>(
         			products,
@@ -31,8 +32,8 @@ public class ProductController {
     }
 
     @GetMapping(value = "/products", params = "category")
-    public ResponseEntity<List<Product>> getAllProductByCategory(@RequestParam ("category") String category){
-        List<Product> products = productService.getAllProductByCategory(category);
+    public ResponseEntity<List<Product>> getAllProductByCategory(@RequestParam String category) throws Exception{
+        List<Product> products = service.getAllProductByCategory(category).get();
         if(!products.isEmpty()) {
         	return new ResponseEntity<>(
         			products,
@@ -43,8 +44,8 @@ public class ProductController {
     }
 
     @GetMapping (value = "/products/{id}")
-    public ResponseEntity<Product> getOneProductById(@PathVariable ("id") long id){
-        Product product =  productService.getProductById(id);
+    public ResponseEntity<Product> getOneProductById(@PathVariable ("id") long id) throws Exception{
+        Product product =  service.getProductById(id).get();
         if(product != null) {
         	return new ResponseEntity<>(
         			product,
@@ -55,8 +56,8 @@ public class ProductController {
     }
 
     @GetMapping (value = "/products", params = "name")
-    public ResponseEntity<List<Product>> getAllProductsByName(@RequestParam ("name") String name){
-        List<Product> products =  productService.getAllProductsByName(name);
+    public ResponseEntity<List<Product>> getAllProductsByName(@RequestParam ("name") String name) throws Exception{
+        List<Product> products =  service.getAllProductsByName(name).get();
         if(!products.isEmpty()) {
         	return new ResponseEntity<>(
         			products,
