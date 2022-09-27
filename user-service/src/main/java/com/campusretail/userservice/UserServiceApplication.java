@@ -26,17 +26,6 @@ public class UserServiceApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean("threadPoolExecutor")
-	public TaskExecutor getAsyncExecutor() {
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(2);
-		executor.setMaxPoolSize(200);
-		executor.setQueueCapacity(100);
-		executor.setThreadNamePrefix("Async-");
-		executor.initialize();
-		return executor;
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(UserServiceApplication.class, args);
 	}
