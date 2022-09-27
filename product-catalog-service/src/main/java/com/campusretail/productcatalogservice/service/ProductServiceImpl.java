@@ -1,60 +1,90 @@
 package com.campusretail.productcatalogservice.service;
 
+import com.campusretail.productcatalogservice.entity.Category;
 import com.campusretail.productcatalogservice.entity.Product;
+import com.campusretail.productcatalogservice.repository.CategoryRepository;
 import com.campusretail.productcatalogservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+
+/**
+ * Implementation of the Product service
+ * interface to develop all the necessary methods
+ * and doing it async
+ */
 @Service
 @Transactional
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository repository;
-    
-    @Autowired
-    public ProductServiceImpl(ProductRepository repository) {
-        this.repository = repository;
-    }
+	private final ProductRepository productRepository;
+	private final CategoryRepository categoryRepository;
 
-    @Override
-    public CompletableFuture<List<Product>> getAllProduct() {
-        return CompletableFuture.completedFuture(repository.findAll());
-    }
+	@Autowired
+	public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+		this.productRepository = productRepository;
+		this.categoryRepository = categoryRepository;
+	}
 
-    @Override
-    public CompletableFuture<List<Product>> getAllProductByCategory(String category) {
-        return CompletableFuture.completedFuture(this.repository.findAll()
-                .stream()
-                .filter(product -> product.getCategory()
-                        .stream()
-                        .anyMatch(
-                                cat -> cat.getCategory().equals(category)
-                        )
-                )
-                .collect(Collectors.toList()));
-    }
+	@Override
+	@Async("AsyncExecutor")
+	public CompletableFuture<List<Product>> getAllProduct() {
+		return CompletableFuture.completedFuture(productRepository.findAll());
+	}
 
-    @Override
-    public CompletableFuture<Product> getProductById(Long id) {
-        return CompletableFuture.completedFuture(repository.findById(id).orElse(null));
-    }
+	@Override
+	@Async("AsyncExecutor")
+	public CompletableFuture<List<Product>> getAllProductByCategory(String category) {
+		return CompletableFuture.completedFuture(this.productRepository.findAll()
+				.stream()
+				.filter(product -> product.getCategory()
+						.stream()
+						.anyMatch(
+								cat -> cat.getCategory().equals(category)
+						)
+				)
+				.collect(Collectors.toList()));
+	}
 
-    @Override
-    public CompletableFuture<List<Product>> getAllProductsByName(String name) {
-        return CompletableFuture.completedFuture(repository.findAllByProductName(name));
-    }
+	@Override
+	@Async("AsyncExecutor")
+	public CompletableFuture<Product> getProductById(Long id) {
+		return CompletableFuture.completedFuture(productRepository.findById(id).orElse(null));
+	}
 
-    @Override
-    public  CompletableFuture<Product> addProduct(Product product) {
-        return CompletableFuture.completedFuture(repository.save(product));
-    }
+	@Override
+	@Async("AsyncExecutor")
+	public CompletableFuture<List<Product>> getAllProductsByName(String name) {
+		return CompletableFuture.completedFuture(productRepository.findAllByProductName(name));
+	}
 
-    @Override
-    public void deleteProduct(Long productId) {
-        repository.deleteById(productId);
-    }
+	@Override
+	@Async("AsyncExecutor")
+	public CompletableFuture<Product> saveProduct(Product product) {
+		Set<Category> productCategories = product.getCategory();
+		Set<Category> categories = categoryRepository.findAll()
+				.stream()
+				.filter(category -> 
+						productCategories
+								.stream()
+								.anyMatch(category::equals)
+				)
+				.collect(Collectors.toSet());
+		if (categories.isEmpty()) categories.add(categoryRepository.findById(1L).orElse(null));
+		
+		product.setCategory(categories);
+		return CompletableFuture.completedFuture(productRepository.save(product));
+	}
+
+	@Override
+	public void deleteProduct(Long productId) {
+		productRepository.deleteById(productId);
+	}
 }

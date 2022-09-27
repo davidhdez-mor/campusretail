@@ -5,11 +5,16 @@ import java.util.concurrent.CompletableFuture;
 
 import com.campusretail.productcatalogservice.entity.Product;
 
+/**
+ * Interface to declare all the requested
+ * methods from the implementation of the 
+ * Product service and doing it async
+ */
 public interface ProductService {
     CompletableFuture<List<Product>> getAllProduct();
     CompletableFuture<List<Product>> getAllProductByCategory(String category);
     CompletableFuture<Product> getProductById(Long id);
     CompletableFuture<List<Product>> getAllProductsByName(String name);
-    CompletableFuture<Product> addProduct(Product product);
+    CompletableFuture<Product> saveProduct(Product product);
     void deleteProduct(Long productId);
 }

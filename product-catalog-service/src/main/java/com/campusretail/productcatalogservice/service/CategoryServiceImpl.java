@@ -7,9 +7,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Implementation of the Category service
+ * interface to develop all the necessary methods
+ * and doing it async
+ */
 @Service
 @Transactional
 public class CategoryServiceImpl implements CategoryService {
@@ -28,7 +32,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	@Async("AsyncExecutor")
-	public CompletableFuture<Category> addCategory(Category category) {
+	public CompletableFuture<Category> saveCategory(Category category) {
+		String tag = category.getCategory().toLowerCase();
+		category.setCategory(tag);
 		return CompletableFuture.completedFuture(this.repository.save(category));
 	}
 

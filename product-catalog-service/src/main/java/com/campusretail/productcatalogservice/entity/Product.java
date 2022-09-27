@@ -5,8 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
+
+/**
+ * Entity class Product with its 
+ * attributes and configurations for
+ * the database
+ */
 @Entity(name = "products")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
@@ -26,9 +32,9 @@ public class Product {
 	@Column(name = "description")
 	private String description;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id")
-	private List<Category> category;
+	private Set<Category> category;
 
 	@Column(name = "availability")
 	@NotNull
@@ -38,7 +44,7 @@ public class Product {
 
 	}
 
-	public Product(Long id, String productName, BigDecimal price, String description, List<Category> category, int availability) {
+	public Product(Long id, String productName, BigDecimal price, String description, Set<Category> category, int availability) {
 		this.id = id;
 		this.productName = productName;
 		this.price = price;
@@ -79,11 +85,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public List<Category> getCategory() {
+	public Set<Category> getCategory() {
 		return category;
 	}
 
-	public void setCategory(List<Category> category) {
+	public void setCategory(Set<Category> category) {
 		this.category = category;
 	}
 
