@@ -37,26 +37,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Async("threadPoolExecutor")
-	public CompletableFuture<List<User>> getAllUsers() {
+	@Async("AsyncExecutor")
+	public CompletableFuture<List<User>> getAllUsersAsync() {
 		return CompletableFuture.completedFuture(userRepository.findAll());
 	}
 
 	@Override
-	@Async("threadPoolExecutor")
-	public CompletableFuture<User> getUserById(Long id) {
+	@Async("AsyncExecutor")
+	public CompletableFuture<User> getUserByIdAsync(Long id) {
 		return CompletableFuture.completedFuture(userRepository.findById(id).orElse(null));
 	}
 
 	@Override
-	@Async("threadPoolExecutor")
-	public CompletableFuture<User> getUserByName(String userName) {
+	@Async("AsyncExecutor")
+	public CompletableFuture<User> getUserByNameAsync(String userName) {
 		return CompletableFuture.completedFuture(userRepository.findByUserName(userName));
 	}
 
 	@Override
-	@Async("threadPoolExecutor")
-	public CompletableFuture<User> saveUser(User user) {
+	@Async("AsyncExecutor")
+	public CompletableFuture<User> saveUserAsync(User user) {
 		user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 		user.setActive(1);
 		UserRole role = userRoleRepository.findUserRoleByRoleName("User");

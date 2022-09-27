@@ -2,7 +2,6 @@ package com.campusretail.userservice.service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import com.campusretail.userservice.entity.User;
 
@@ -14,8 +13,8 @@ import com.campusretail.userservice.entity.User;
 
 public interface UserService {
     
-    CompletableFuture<List<User>> getAllUsers();
-    CompletableFuture<User> getUserById(Long id);
-    CompletableFuture<User> getUserByName(String userName);
-    CompletableFuture<User> saveUser(User user);
+    CompletableFuture<List<User>> getAllUsersAsync();
+    CompletableFuture<User> getUserByIdAsync(Long id);
+    CompletableFuture<User> getUserByNameAsync(String userName);
+    CompletableFuture<User> saveUserAsync(User user);
 }
