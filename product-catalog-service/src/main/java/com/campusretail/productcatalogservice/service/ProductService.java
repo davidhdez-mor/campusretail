@@ -1,14 +1,15 @@
 package com.campusretail.productcatalogservice.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.campusretail.productcatalogservice.entity.Product;
 
 public interface ProductService {
-    List<Product> getAllProduct();
-    List<Product> getAllProductByCategory(String category);
-    Product getProductById(Long id);
-    List<Product> getAllProductsByName(String name);
-    Product addProduct(Product product);
+    CompletableFuture<List<Product>> getAllProduct();
+    CompletableFuture<List<Product>> getAllProductByCategory(String category);
+    CompletableFuture<Product> getProductById(Long id);
+    CompletableFuture<List<Product>> getAllProductsByName(String name);
+    CompletableFuture<Product> addProduct(Product product);
     void deleteProduct(Long productId);
 }
