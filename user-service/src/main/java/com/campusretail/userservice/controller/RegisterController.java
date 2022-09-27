@@ -46,7 +46,7 @@ public class RegisterController {
 	public ResponseEntity<ReadUserDto> addUser(@RequestBody WriteUserDto createUser) {
 		if (createUser != null) try {
 			User user = this.mapper.map(createUser, User.class);
-			userService.saveUser(user).get();
+			userService.saveUserAsync(user).get();
 			ReadUserDto readUserDto = this.mapper.map(user, ReadUserDto.class);
 			return new ResponseEntity<>(readUserDto, HttpStatus.CREATED);
 		} catch (Exception e) {
