@@ -1,5 +1,7 @@
 package com.campusretail.productcatalogservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -8,12 +10,15 @@ import java.util.List;
 public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
+	
 	@Column(name = "category")
 	@NotNull
 	private String category;
 	
 	@ManyToMany(mappedBy = "category")
+	@JsonIgnore
 	private List<Product> products;
 
 	public Category() {
