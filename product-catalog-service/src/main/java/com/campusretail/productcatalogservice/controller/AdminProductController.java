@@ -2,6 +2,8 @@ package com.campusretail.productcatalogservice.controller;
 
 import com.campusretail.productcatalogservice.dto.WriteProductDto;
 import com.campusretail.productcatalogservice.entity.Product;
+import com.campusretail.productcatalogservice.exception.ProductNotFoundException;
+import com.campusretail.productcatalogservice.exception.RequestEmptyException;
 import com.campusretail.productcatalogservice.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,25 +32,6 @@ public class AdminProductController {
 	}
 	
 	/**
-	 * Endpoint to get all the products
-	 * in the database
-	 * @return a list of products inside the database
-	 * @throws Exception in case of bad working of the 
-	 * asynchronous methods
-	 */
-	@GetMapping(value = "/products")
-	public ResponseEntity<List<Product>> getAllProducts() throws Exception {
-		List<Product> products = this.service.getAllProduct().get();
-		if (!products.isEmpty()) {
-			return new ResponseEntity<>(
-					products,
-					HttpStatus.OK);
-		}
-		return new ResponseEntity<>(
-				HttpStatus.NOT_FOUND);
-	}
-
-	/**
 	 * Endpoint which adds to the database a new
 	 * product using a DTO to write it 
 	 * @param writeProductDto the product template to
@@ -72,7 +55,7 @@ public class AdminProductController {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		throw new RequestEmptyException("The request should not be empty");
 	}
 
 
@@ -96,7 +79,7 @@ public class AdminProductController {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		throw new ProductNotFoundException("The product with id " + id + " was not found");
 	}	
 	
 	/**
@@ -117,6 +100,6 @@ public class AdminProductController {
 				e.printStackTrace();
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		throw new ProductNotFoundException("The product with id " + id + " was not found");
 	}
 }

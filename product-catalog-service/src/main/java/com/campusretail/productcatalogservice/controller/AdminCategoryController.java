@@ -1,6 +1,8 @@
 package com.campusretail.productcatalogservice.controller;
 
 import com.campusretail.productcatalogservice.entity.Category;
+import com.campusretail.productcatalogservice.exception.CategoryNotFoundException;
+import com.campusretail.productcatalogservice.exception.RequestEmptyException;
 import com.campusretail.productcatalogservice.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,7 @@ public class AdminCategoryController {
 		if (categories != null) {
 			return new ResponseEntity<>(categories, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		throw new CategoryNotFoundException("There are no categories");
 	}
 
 
@@ -56,7 +58,7 @@ public class AdminCategoryController {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		throw new RequestEmptyException("Request body for category should not be empty");
 	}
 
 
@@ -80,7 +82,7 @@ public class AdminCategoryController {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		throw new CategoryNotFoundException("Category with id " + id + "was not found");
 	}
 
 	/**
@@ -101,6 +103,6 @@ public class AdminCategoryController {
 				e.printStackTrace();
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		throw new CategoryNotFoundException("Category with id " + id + "was not found");
 	}
 }
