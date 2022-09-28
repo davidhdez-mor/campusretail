@@ -18,7 +18,7 @@ public class UserRole {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "role_name")
+	@Column(name = "role_name", unique = true)
 	private String roleName;
 
 	@OneToMany(mappedBy = "role")
