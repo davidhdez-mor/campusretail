@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Controller to manage all the 
  * operations for the admin entity
@@ -20,6 +22,20 @@ public class AdminCategoryController {
 	@Autowired
 	public AdminCategoryController(CategoryService service) {
 		this.service = service;
+	}
+
+	/**
+	 * GET endpoint for returning a list of categories
+	 * @return List\<Category\> representing all categories in database
+	 * @throws Exception if the service did not complete the request successfully
+	 */
+	@GetMapping("/categories")
+	public ResponseEntity<List<Category>> getAllCategories() throws Exception {
+		List<Category> categories = this.service.getCategories().get();
+		if (categories != null) {
+			return new ResponseEntity<>(categories, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 

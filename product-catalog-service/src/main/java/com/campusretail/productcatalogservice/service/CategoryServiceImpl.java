@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -22,6 +23,12 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	public CategoryServiceImpl(CategoryRepository repository) {
 		this.repository = repository;
+	}
+
+	@Override
+	@Async("AsyncExecutor")
+	public CompletableFuture<List<Category>> getCategories() {
+		return CompletableFuture.completedFuture(this.repository.findAll());
 	}
 
 	@Override
