@@ -82,7 +82,7 @@ public class AdminCategoryController {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		throw new CategoryNotFoundException("Category with id " + id + "was not found");
+		throw new CategoryNotFoundException("Category with id " + id + " was not found");
 	}
 
 	/**
@@ -103,6 +103,6 @@ public class AdminCategoryController {
 				e.printStackTrace();
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		throw new CategoryNotFoundException("Category with id " + id + "was not found");
+		throw new CategoryNotFoundException("Category with id " + id + " was not found");
 	}
 }

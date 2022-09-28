@@ -2,17 +2,19 @@
 GET http://localhost:8100/products
 
 ###
-GET http://localhost:8100/admin/products
-Cookie: JSESSIONID=0B5A48C2B411EF2DEA16E3DEBB20F4AD
+GET http://localhost:8100/products?name=abc
+
+###
+GET http://localhost:8100/products?category=pantallas
 
 ###
 POST http://localhost:8100/admin/products
 Content-Type: application/json
-Cookie: JSESSIONID=0B5A48C2B411EF2DEA16E3DEBB20F4AD
+Cookie: JSESSIONID=0A75BAD7DCC7EDC7CCE4A77AAA6D3344
 
 {
   "productName": "Monitor LG original",
-  "price": "11500.5",
+  "price": "100",
   "description": "Monitor de 25 pulgadas 144 Hz",
   "availability": true,
   "categoryList": [

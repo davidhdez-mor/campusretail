@@ -40,14 +40,9 @@ public class AdminProductController {
 	 */
 	@PostMapping("/products")
 	private ResponseEntity<Product> addProduct(@RequestBody WriteProductDto writeProductDto) {
-		if (writeProductDto != null) {
+		if (writeProductDto.isValid()) {
 			try {
 				Product product = this.mapper.map(writeProductDto, Product.class);
-//				List<Category> categories = writeProductDto.getCategoryList()
-//						.stream()
-//						.map(readCategoryDto -> this.mapper.map(readCategoryDto, Category.class))
-//						.collect(Collectors.toList());
-//				product.setCategory(categories);
 				service.saveProduct(product).get();
 				return new ResponseEntity<>(product, HttpStatus.CREATED);
 			} catch (Exception e) {

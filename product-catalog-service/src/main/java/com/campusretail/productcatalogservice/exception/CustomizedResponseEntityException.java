@@ -21,6 +21,14 @@ public class CustomizedResponseEntityException extends ResponseEntityExceptionHa
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
+    
+    @ExceptionHandler(RuntimeException.class)
+    public final ResponseEntity<ErrorDetails> handleAllExceptions(RuntimeException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
+                ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(ProductNotFoundException.class)
     public final ResponseEntity<ErrorDetails> handleProductNotFoundException(Exception ex, WebRequest request) {

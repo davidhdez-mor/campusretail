@@ -42,7 +42,7 @@ public class ProductController {
 					products,
 					HttpStatus.OK);
 		}
-		throw new ProductNotFoundException("Products does not exists");
+		throw new ProductNotFoundException("Products does not exist");
 	}
 
 
@@ -83,7 +83,7 @@ public class ProductController {
 					product,
 					HttpStatus.OK);
 		}
-		throw new ProductNotFoundException("Product with id " + id + "was not found");
+		throw new ProductNotFoundException("Product with id " + id + " was not found");
 	}
 
 	/**
@@ -105,6 +105,6 @@ public class ProductController {
 					products,
 					HttpStatus.OK);
 		}
-		throw new ProductNotFoundException("Products with name" + name + "were not found");
+		throw new ProductNotFoundException("Products with name " + name + " were not found");
 	}
 }

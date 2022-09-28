@@ -77,4 +77,8 @@ public class WriteProductDto {
 	public void setCategoryList(Set<ReadCategoryDto> categoryList) {
 		this.categoryList = categoryList;
 	}
+	
+	public boolean isValid() {
+		return productName != null & price != null & categoryList != null;
+	}
 }
