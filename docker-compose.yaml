@@ -39,4 +39,11 @@ services:
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "MySuperSafePassword#"
+  redis-cart-service:
+    image: redis:latest
+    container_name: "cart-cache"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis/data:/data
 
