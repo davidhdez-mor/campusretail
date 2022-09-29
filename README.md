@@ -10,7 +10,7 @@
 
 ### Project architecture
  
-![micro](https://user-images.githubusercontent.com/50141193/58799788-845b1c00-8606-11e9-924b-1b4c03a9091c.png)
+![micro](https://user-images.githubusercontent.com/108817413/193101252-059d826d-795a-404c-ad01-25d45391ae28.png)
 
 ### Tools and Technologies
 
