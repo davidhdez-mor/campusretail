@@ -7,6 +7,11 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Product entity class with all the 
+ * needed attributes and configuration
+ * for the database insertion
+ */
 @Entity
 @Table (name = "products")
 public class Product {

@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Configuration class of the spring
  * security libraries
  */
-@Configuration
+//@Configuration
 public class SpringSecurityConfiguration {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -20,9 +20,7 @@ public class SpringSecurityConfiguration {
 				.disable()
 				.authorizeHttpRequests()
 					.antMatchers("/admin/**").hasRole("ADMIN")
-					.antMatchers("/**").permitAll()
-				.and()
-				.formLogin();
+					.antMatchers("/**").permitAll();
 		return http.build();
 	}
 }

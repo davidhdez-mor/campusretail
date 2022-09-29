@@ -6,6 +6,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * Cart entity class with all the 
+ * needed attributes and configuration
+ * for the database insertion
+ */
 @Entity
 @Table (name = "users")
 public class User {

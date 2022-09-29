@@ -7,6 +7,11 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Item entity class with all the 
+ * needed attributes and configuration
+ * for the database insertion
+ */
 @Entity
 @Table (name = "items")
 public class Item {
@@ -16,7 +21,6 @@ public class Item {
     @JsonIgnore
     private Long id;
 
-	//TODO checar la libreria apropiada para implementar NotNull en los Beans necesarios
     @Column (name = "quantity")
     @NotNull
     private int quantity;
