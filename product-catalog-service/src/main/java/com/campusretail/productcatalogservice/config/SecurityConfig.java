@@ -13,7 +13,6 @@ public class SecurityConfig {
 		http.httpBasic(Customizer.withDefaults())
 				.csrf().disable()
 				.authorizeHttpRequests()
-					.antMatchers("/admin/**").hasRole("ADMIN")
 					.antMatchers("/**").permitAll();
 		return http.build();
 	}

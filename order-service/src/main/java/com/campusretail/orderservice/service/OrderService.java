@@ -2,6 +2,7 @@ package com.campusretail.orderservice.service;
 
 import com.campusretail.orderservice.domain.Order;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -10,5 +11,5 @@ import java.util.concurrent.CompletableFuture;
  * of Cart class
  */
 public interface OrderService {
-    CompletableFuture<Order> saveOrder(Order order);
+    CompletableFuture<Optional<Order>> saveOrder(Long cartId);
 }

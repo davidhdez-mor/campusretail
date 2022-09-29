@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.campusretail.orderservice.domain.Item;
-import com.campusretail.orderservice.domain.Order;
-import com.campusretail.orderservice.domain.User;
+import com.campusretail.orderservice.domain.*;
 
 /**
  * Class with useful methods
@@ -22,13 +20,13 @@ public class OrderUtilities {
         return total;
     }
     
-   public static Order createOrder(List<Item> cart, User user) {
+   public static Order createOrder(Cart cart, User user) {
         Order order = new Order();
-        order.setItems(cart);
+        order.setCart(cart);
         order.setUser(user);
-        order.setTotal(OrderUtilities.countTotalPrice(cart));
+        order.setTotal(OrderUtilities.countTotalPrice(cart.getItems()));
         order.setOrderedDate(LocalDate.now());
-        order.setStatus("PAYMENT_EXPECTED");
+        order.setStatus(Status.OPEN);
         return order;
-    }
+       }
 }

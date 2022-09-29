@@ -7,6 +7,7 @@ import com.campusretail.orderservice.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +36,9 @@ public class CartController {
 	 * @param cartId the id of the cart in the API
 	 * @return a collection of all the items of the cart
 	 */
+	@PreAuthorize("hasAnyRole()")
 	@GetMapping(value = "/cart")
-	public ResponseEntity<List<Item>> getCart(@RequestHeader(value = "Cookie") Long cartId) throws InterruptedException, ExecutionException{
+	public ResponseEntity<List<Item>> getCart(@RequestHeader("Cookie") Long cartId) throws InterruptedException, ExecutionException{
 		Optional<Cart> cart = cartService.getCart(cartId).get();
 		if (cart.isPresent()) {
 			return new ResponseEntity<>(cart.get().getItems(), HttpStatus.OK);
@@ -56,14 +58,18 @@ public class CartController {
 	 * @return a new list with the added products
 	 */
 	@PostMapping(value = "/cart", params = {"productId", "quantity"})
-	public ResponseEntity<List<Item>> addItemToCart(@RequestParam Long productId, @RequestParam Integer quantity, @RequestHeader(value = "Cookie") Long cartId) throws InterruptedException, ExecutionException {
+	public ResponseEntity<List<Item>> addItemToCart(@RequestParam Long productId,
+	                                                @RequestParam Integer quantity,
+	                                                @RequestHeader("Cookie") Long cartId)
+			throws InterruptedException, ExecutionException {
+		
 		Optional<Cart> optionalCart = cartService.getCart(cartId).get();
 		if (optionalCart.isPresent()) {
 			Cart cart = optionalCart.get();
 			if (cart.getItems().isEmpty()) {
 				cartService.addItemToCart(cartId, productId, quantity);
 			} else {
-				if (cartService.checkIfItemExists(cartId, productId)) {
+				if (cartService.checkIfItemExists(cartId, productId).get()) {
 					cartService.changeItemQuantity(cartId, productId, quantity);
 				} else {
 					cartService.addItemToCart(cartId, productId, quantity);

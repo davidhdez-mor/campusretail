@@ -1,10 +1,10 @@
 package com.campusretail.orderservice.domain;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Order entity class with all the 
@@ -25,21 +25,30 @@ public class Order {
 
     @Column(name = "status")
     @NotNull
-    private String status;
-
+    private Status status;
+		
     @Column (name = "total")
     private BigDecimal total;
 
-    @ManyToMany (cascade = CascadeType.ALL)
-    @JoinTable (name = "cart" , joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn (name = "item_id"))
-    private List<Item> items;
-
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn (name = "user_id")
     private User user;
-    
+
+	@ManyToOne
+	@JoinColumn (name = "cart_id")
+	private Cart cart;
+	
 	public Order() {
 		
+	}
+
+	public Order(Long id, LocalDate orderedDate, Status status, BigDecimal total, User user, Cart cart) {
+		this.id = id;
+		this.orderedDate = orderedDate;
+		this.status = status;
+		this.total = total;
+		this.user = user;
+		this.cart = cart;
 	}
 
 	public Long getId() {
@@ -58,11 +67,11 @@ public class Order {
 		this.orderedDate = orderedDate;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
@@ -74,19 +83,19 @@ public class Order {
 		this.total = total;
 	}
 
-	public List<Item> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
-
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 }

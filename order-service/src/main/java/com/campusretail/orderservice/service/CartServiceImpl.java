@@ -3,9 +3,11 @@ package com.campusretail.orderservice.service;
 import com.campusretail.orderservice.domain.Cart;
 import com.campusretail.orderservice.domain.Item;
 import com.campusretail.orderservice.domain.Product;
+import com.campusretail.orderservice.exception.CartNotFoundException;
 import com.campusretail.orderservice.feignclient.ProductClient;
 import com.campusretail.orderservice.repository.CartRepository;
 import com.campusretail.orderservice.utilities.CartUtilities;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,17 +43,23 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void addItemToCart(Long cartId, Long productId, Integer quantity) {
 		Product product = productClient.getProductById(productId);
-		Item item = new Item(quantity, product, CartUtilities.getSubTotalForItem(product, quantity));
-		Cart cart = cartRepository.findById(cartId).orElse(null);
-		List<Item> items = cart.getItems();
-		items.add(item);
-		cart.setItems(items);
-		cartRepository.save(cart);
+		Item item = new Item(quantity, CartUtilities.getSubTotalForItem(product, quantity), product);
+		Optional<Cart> optionalCart = cartRepository.findById(cartId);
+		if (optionalCart.isPresent()) {
+			Cart cart = optionalCart.get();
+			List<Item> items = cart.getItems();
+			items.add(item);
+			cart.setItems(items);
+			CompletableFuture.runAsync(() -> cartRepository.save(cart));
+		}
 	}
 
 	@Override
 	public CompletableFuture<Optional<Cart>> getCart(Long cartId) {
-		return CompletableFuture.completedFuture(cartRepository.findById(cartId));
+		Optional<Cart> optionalCart = cartRepository.findById(cartId);
+		if (optionalCart.isPresent())
+			return CompletableFuture.completedFuture(optionalCart);
+		throw new CartNotFoundException("");
 	}
 
 	@Override
@@ -65,7 +73,7 @@ public class CartServiceImpl implements CartService {
 				.collect(Collectors.toList());
 		items.forEach(item -> item.setQuantity(quantity));
 		cart.setItems(items);
-		cartRepository.save(cart);
+		CompletableFuture.runAsync(() -> cartRepository.save(cart));
 	}
 	
 	@Override
@@ -74,15 +82,15 @@ public class CartServiceImpl implements CartService {
 		List<Item> items = cart.getItems();
 		items.removeIf(item -> item.getProduct().getId().equals(productId));
 		cart.setItems(items);
-		cartRepository.save(cart);
+		CompletableFuture.runAsync(() -> cartRepository.save(cart));
 	}
 
 	@Override
-	public boolean checkIfItemExists(Long cartId, Long productId) {
+	public CompletableFuture<Boolean> checkIfItemExists(Long cartId, Long productId) {
 		Cart cart = cartRepository.findById(cartId).orElse(null);
-		return cart.getItems()
+		return CompletableFuture.completedFuture(cart.getItems()
 				.stream()
-				.anyMatch(item -> item.getProduct().getId().equals(productId));
+				.anyMatch(item -> item.getProduct().getId().equals(productId)));
 	}
 
 	@Override
@@ -93,6 +101,6 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void deleteCart(Long cartId) {
 		Cart cart = cartRepository.findById(cartId).orElse(null);
-		cartRepository.delete(cart);
+		CompletableFuture.runAsync(() -> cartRepository.delete(cart));
 	}
 }

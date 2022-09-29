@@ -25,7 +25,8 @@ public class Item {
     @NotNull
     private int quantity;
 
-    @Column (name = "subtotal")
+
+	@Column (name = "subtotal")
     @NotNull
     private BigDecimal subTotal;
 
@@ -33,19 +34,16 @@ public class Item {
     @JoinColumn (name = "product_id")
     private Product product;
 
-    @ManyToMany (mappedBy = "items")
-    @JsonIgnore
-    private List<Order> orders;
-    
     public Item() {
     	
     }
 
-    public Item(@NotNull int quantity, Product product, BigDecimal subTotal) {
-        this.quantity = quantity;
-        this.product = product;
-        this.subTotal = subTotal;
-    }
+	public Item(int quantity, BigDecimal subTotal, Product product) {
+		this.quantity = quantity;
+		this.subTotal = subTotal;
+		this.product = product;
+	}
+
 
 	public Long getId() {
 		return id;
@@ -77,13 +75,5 @@ public class Item {
 
 	public void setProduct(Product product) {
 		this.product = product;
-	}
-
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
 	}
 }

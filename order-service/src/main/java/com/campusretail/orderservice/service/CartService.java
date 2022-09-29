@@ -18,7 +18,7 @@ public interface CartService {
     CompletableFuture<Optional<Cart>> getCart(Long cartId);
     void changeItemQuantity(Long cartId, Long productId, Integer quantity);
     void deleteItemFromCart(Long cartId, Long productId);
-    boolean checkIfItemExists(Long cartId, Long productId);
+    CompletableFuture<Boolean> checkIfItemExists(Long cartId, Long productId);
     CompletableFuture<List<Item>> getAllItemsFromCart(Long cartId);
     void deleteCart(Long cartId);
 }

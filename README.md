@@ -10,22 +10,18 @@
 
 ### Project architecture
  
-![micro](https://user-images.githubusercontent.com/50141193/58799788-845b1c00-8606-11e9-924b-1b4c03a9091c.png)
+![micro](https://user-images.githubusercontent.com/108817413/193101252-059d826d-795a-404c-ad01-25d45391ae28.png)
 
 ### Tools and Technologies
 
 - **Java 8**
 - **Spring Boot** - version 2.7.3 RELEASE
-- **Spring Web MVC** - 
-- **Spring SESSION** - 
+- **Spring Web MVC** -
 - **Spring Cloud - Feign** -
 - **Netflix Eureka Client/Server** -
-- **Redis Client : JEDIS** - 
-- **Spring Data REDIS** - 
 - **Spring Data JPA** -  
 - **Hibernate** - 
 - **SQL Database engine with Docker** : Microsoft SQL 2022
-- **NOSQL Database engine** : Redis 3.2.100
 - **Maven**
 
 ### Features

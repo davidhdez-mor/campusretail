@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import io.jsonwebtoken.Jwts;
@@ -88,27 +85,26 @@ public class UserServiceImpl implements UserService {
 	@Async("AsyncExecutor")
 	public CompletableFuture<ReadUserDto> saveUserAsync(WriteUserDto writeUserDto) {
 		Optional<User> checkUser = userRepository.findByUserName(writeUserDto.getUserName());
-		if (!checkUser.isPresent())
+		if (checkUser.isPresent())
 			throw new RuntimeException("User already exist");
 
+//		UserDetails details = new UserDetails();
+//		details.setEmail(writeUserDto.getEmail());
+//		details.setFirstName(writeUserDto.getFirstName());
+//		details.setLastName(writeUserDto.getLastName());
+//		details.setCountry(writeUserDto.getCountry());
+//		details.setLocality(writeUserDto.getLocality());
+//		details.setStreet(writeUserDto.getStreet());
+//		details.setZipCode(writeUserDto.getZipCode());
+//		details.setStreetNumber(writeUserDto.getStreetNumber());
+//		details.setPhoneNumber(writeUserDto.getPhoneNumber());
+		
 		String password = passwordEncoder.encode(writeUserDto.getUserPassword());
-		
-		UserDetails details = new UserDetails();
-		details.setEmail(writeUserDto.getEmail());
-		details.setFirstName(writeUserDto.getFirstName());
-		details.setLastName(writeUserDto.getLastName());
-		details.setCountry(writeUserDto.getCountry());
-		details.setLocality(writeUserDto.getLocality());
-		details.setStreet(writeUserDto.getStreet());
-		details.setZipCode(writeUserDto.getZipCode());
-		details.setStreetNumber(writeUserDto.getStreetNumber());
-		details.setPhoneNumber(writeUserDto.getPhoneNumber());
-		
 		UserRole role = userRoleRepository.findUserRoleByRoleName("User");
 		User user = new User();
 		user.setUserName(writeUserDto.getUserName());
 		user.setUserPassword(password);
-		user.setUserDetails(details);
+//		user.setUserDetails(details);
 		user.setRole(role);
 		user.setActive(1);
 		
@@ -148,13 +144,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private String createToken(User user) {
-		Claims claims = Jwts.claims().setSubject(user.getUserName());
-
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 3600000); // 1 hour
 
 		return Jwts.builder()
-				.setClaims(claims)
+				.claim("name", user.getUserName())
+				.claim("role", user.getRole().getRoleName())
 				.setIssuedAt(now)
 				.setExpiration(validity)
 				.signWith(SignatureAlgorithm.HS256, secretKey)
