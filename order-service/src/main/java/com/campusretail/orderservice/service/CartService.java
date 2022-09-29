@@ -1,16 +1,24 @@
 package com.campusretail.orderservice.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
+import com.campusretail.orderservice.domain.Cart;
 import com.campusretail.orderservice.domain.Item;
 
+/**
+ * Interface with all the needed
+ * methods for the implementation
+ * of Cart class
+ */
 public interface CartService {
 
-    public void addItemToCart(String cartId, Long productId, Integer quantity);
-    public List<Object> getCart(String cartId);
-    public void changeItemQuantity(String cartId, Long productId, Integer quantity);
-    public void deleteItemFromCart(String cartId, Long productId);
-    public boolean checkIfItemIsExist(String cartId, Long productId);
-    public List<Item> getAllItemsFromCart(String cartId);
-    public void deleteCart(String cartId);
+    void addItemToCart(Long cartId, Long productId, Integer quantity);
+    CompletableFuture<Optional<Cart>> getCart(Long cartId);
+    void changeItemQuantity(Long cartId, Long productId, Integer quantity);
+    void deleteItemFromCart(Long cartId, Long productId);
+    boolean checkIfItemExists(Long cartId, Long productId);
+    CompletableFuture<List<Item>> getAllItemsFromCart(Long cartId);
+    void deleteCart(Long cartId);
 }

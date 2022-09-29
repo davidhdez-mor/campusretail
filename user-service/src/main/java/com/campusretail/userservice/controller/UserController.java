@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ public class UserController {
 	 */
 	@GetMapping(value = "/users", params = "name")
 	public ResponseEntity<ReadUserDto> getUserByName(@RequestParam("name") String userName) throws ExecutionException, InterruptedException{
-		User user = userService.getUserByNameAsync(userName).get();
+		Optional<User> user = userService.getUserByNameAsync(userName).get();
 		if (user != null) {
 			ReadUserDto readUserDto = this.modelMapper.map(user, ReadUserDto.class);
 			return new ResponseEntity<>(readUserDto, HttpStatus.OK);

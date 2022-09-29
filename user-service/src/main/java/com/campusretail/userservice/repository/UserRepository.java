@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.campusretail.userservice.entity.User;
 
+import java.util.Optional;
+
 /**
  * Repository interface to have all the tools
  * of the JPA repository for the User class,
@@ -13,5 +15,5 @@ import com.campusretail.userservice.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUserName(String userName);
+    Optional<User> findByUserName(String userName);
 }

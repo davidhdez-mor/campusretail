@@ -6,6 +6,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Order entity class with all the 
+ * needed attributes and configuration
+ * for the database insertion
+ */
 @Entity
 @Table (name = "orders")
 public class Order {
