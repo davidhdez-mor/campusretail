@@ -14,42 +14,52 @@ import java.time.LocalDate;
 
 /**
  * An Exception handler class to
- * manage customizes errors and 
- * messages 
+ * manage customizes errors and
+ * messages
  */
 public class CustomizedResponseEntityException extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
-	public final ResponseEntity<Object> handleAllException(Exception ex, WebRequest request)
-	{
-		ErrorDetails errorDetails= new ErrorDetails(LocalDate.now(),
+	public final ResponseEntity<Object> handleAllException(Exception ex, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
 				ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(CartNotFoundException.class)
-	public final ResponseEntity<ErrorDetails> handleCartNotFoundException(Exception ex, WebRequest request)
-	{
-		ErrorDetails errorDetails= new ErrorDetails(LocalDate.now(),
+	public final ResponseEntity<ErrorDetails> handleCartNotFoundException(Exception ex, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
 				ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(OrderNotFoundException.class)
-	public final ResponseEntity<ErrorDetails> handleOrderNotFoundException(Exception ex, WebRequest request)
-	{
-		ErrorDetails errorDetails= new ErrorDetails(LocalDate.now(),
+	public final ResponseEntity<ErrorDetails> handleOrderNotFoundException(Exception ex, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
 				ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(UnableToAddItemException.class)
+	public final ResponseEntity<ErrorDetails> handleUnableToAddItemException(Exception ex, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
+				ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(UnableToAddItemException.class)
+	public final ResponseEntity<ErrorDetails> handleUnableToRemoveItemException(Exception ex, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
+				ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-	                                                              HttpHeaders headers, HttpStatus status, WebRequest request)
-	{
-		ErrorDetails errorDetails= new ErrorDetails(LocalDate.now(),
-				"Total errors"+ex.getErrorCount()+" 0>"+ex.getFieldError().getDefaultMessage(), request.getDescription(false));
+	                                                              HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
+				"Total errors" + ex.getErrorCount() + " 0>" + ex.getFieldError().getDefaultMessage(), request.getDescription(false));
 
-		return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 }

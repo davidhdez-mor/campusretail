@@ -1,24 +1,23 @@
 package com.campusretail.orderservice.service;
 
 import com.campusretail.orderservice.domain.Cart;
+import com.campusretail.orderservice.domain.Item;
 import com.campusretail.orderservice.domain.Order;
 import com.campusretail.orderservice.domain.User;
-import com.campusretail.orderservice.exception.CartNotFoundException;
-import com.campusretail.orderservice.exception.OrderNotFoundException;
-import com.campusretail.orderservice.feignclient.UserClient;
 import com.campusretail.orderservice.repository.CartRepository;
 import com.campusretail.orderservice.repository.OrderRepository;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import static com.campusretail.orderservice.utilities.OrderUtilities.createOrder;
+
 /**
  * Implementation of all the
  * methods from the interface
@@ -40,15 +39,34 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public CompletableFuture<Optional<Order>> saveOrder(Long cartId) {
-		Optional<Cart> optionalCart = cartRepository.findById(cartId);
+	@Async("asyncExecutor")
+	public CompletableFuture<Order> saveOrder(Long userId) {
+		Optional<Cart> optionalCart = cartRepository.findCartByUserId(userId);
 		if (optionalCart.isPresent()) {
 			Cart cart = optionalCart.get();
 			User user = cart.getUser();
-			Order order = orderRepository.save(createOrder(cart, user));
-			cartRepository.delete(cart);
-			return CompletableFuture.completedFuture(orderRepository.findById(order.getId()));
+			List<Item> items = cart.getItems();
+			items.clear();
+			cart.setItems(items);
+			cart = cartRepository.save(cart);
+			return CompletableFuture.completedFuture(orderRepository.save(createOrder(cart, user)));
 		}
-		throw new CartNotFoundException("Cart not found");
+		return CompletableFuture.completedFuture(null);
+	}
+
+	@Override
+	@Async("asyncExecutor")
+	public CompletableFuture<List<Order>> getOrders(Long userId) {
+		return CompletableFuture.completedFuture(orderRepository.findAllByUserId(userId));
+	}
+
+	@Override
+	@Async("asyncExecutor")
+	public CompletableFuture<Order> getOrder(Long id, Long userId) {
+		return CompletableFuture.completedFuture(orderRepository.findAllByUserId(userId)
+				.stream()
+				.filter(order -> order.getId().equals(id))
+				.findAny()
+				.orElse(null));
 	}
 }

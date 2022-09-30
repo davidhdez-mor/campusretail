@@ -1,0 +1,62 @@
+# Endpoints for products
+###
+GET http://localhost:8765/admin/categories
+
+###
+GET http://localhost:8765/products/3
+
+###
+GET http://localhost:8765/products?name=Monitor%20Gamer%20LG
+
+###
+GET http://localhost:8765/products?category=monitors
+
+###
+GET http://localhost:8765/products
+
+###
+POST http://localhost:8765/admin/products
+Content-Type: application/json
+
+{
+  "productName": "Monitor pirata",
+  "price": "100",
+  "description": "Monitor de 25 pulgadas 144 Hz",
+  "availability": true,
+  "categoryList": [
+    {
+      "category": "monitors"
+    },
+    {
+      "category": "mice"
+    }
+  ]
+}
+
+###
+# Endpoints for user
+GET http://localhost:8765/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDU3NTA5NiwiZXhwIjoxNjY0NTc4Njk2fQ.PFfnpODPU_yMKxffdl43AWmsrWkNrmauY1W7xjUg0DE
+
+###
+GET http://localhost:8765/users?name=Romana
+
+###
+POST http://localhost:8765/registration
+Content-Type: application/json
+
+{
+  "userName": "Vincent",
+  "userPassword": "cbrpnkftw"
+}
+
+###
+POST http://localhost:8765/login
+Content-Type: application/json
+
+{
+  "username": "Vincent",
+  "password": "cbrpnkftw"
+}
+
+###

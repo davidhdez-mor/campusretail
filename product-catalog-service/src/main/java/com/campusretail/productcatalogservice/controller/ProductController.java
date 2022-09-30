@@ -38,9 +38,7 @@ public class ProductController {
 	public ResponseEntity<List<Product>> getAllProducts() throws Exception {
 		List<Product> products = this.service.getAllProduct().get();
 		if (!products.isEmpty()) {
-			return new ResponseEntity<>(
-					products,
-					HttpStatus.OK);
+			return new ResponseEntity<>(products, HttpStatus.OK);
 		}
 		throw new ProductNotFoundException("Products does not exist");
 	}

@@ -1,18 +1,17 @@
-package com.campusretail.userservice.dto;
+package com.campusretail.apigateway.dto;
 
-
-public class UserLoginDto {
+public class UserDto {
 	private Long id;
 	private String login;
 	private String token;
 	
 	private String role;
 	
-	public UserLoginDto() {
+	public UserDto(){
 		
 	}
 
-	public UserLoginDto(Long id, String login, String token, String role) {
+	public UserDto(Long id, String login, String token, String role) {
 		this.id = id;
 		this.login = login;
 		this.token = token;

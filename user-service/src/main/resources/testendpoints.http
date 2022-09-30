@@ -8,12 +8,12 @@ GET http://localhost:8000/users/?name=Roman
 GET http://localhost:8000/users/3
 
 ###
-POST http://localhost:8000/registration
+POST http://localhost:8765/registration
 Content-Type: application/json
 
 {
-  "userName": "Roman 2",
-  "userPassword": "contrasenia123"
+  "userName": "Carlitos",
+  "userPassword": "carlotes2000"
 }
 
 ###

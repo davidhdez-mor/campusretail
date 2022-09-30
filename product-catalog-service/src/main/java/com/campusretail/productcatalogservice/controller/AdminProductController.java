@@ -2,6 +2,7 @@ package com.campusretail.productcatalogservice.controller;
 
 import com.campusretail.productcatalogservice.dto.WriteProductDto;
 import com.campusretail.productcatalogservice.entity.Product;
+import com.campusretail.productcatalogservice.exception.CustomizedResponseEntityException;
 import com.campusretail.productcatalogservice.exception.ProductNotFoundException;
 import com.campusretail.productcatalogservice.exception.RequestEmptyException;
 import com.campusretail.productcatalogservice.service.ProductService;
@@ -12,9 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
- * Controller to manage all the advanced 
+ * Controller to manage all the advanced
  * operations for the product entity
  * by the admin
  */
@@ -30,35 +32,36 @@ public class AdminProductController {
 		this.service = service;
 		this.mapper = mapper;
 	}
-	
+
 	/**
 	 * Endpoint which adds to the database a new
-	 * product using a DTO to write it 
+	 * product using a DTO to write it
+	 *
 	 * @param writeProductDto the product template to
-	 *                        add into the database  
+	 *                        add into the database
 	 * @return an HTTP response according to the obtained scenario
 	 */
 	@PostMapping("/products")
-	private ResponseEntity<Product> addProduct(@RequestBody WriteProductDto writeProductDto) {
+	private ResponseEntity<Product> addProduct(@RequestBody WriteProductDto writeProductDto, @RequestHeader("X-auth-role") String role) throws ExecutionException, InterruptedException {
+		if (!role.equals("Admin"))
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		if (writeProductDto.isValid()) {
-			try {
-				Product product = this.mapper.map(writeProductDto, Product.class);
-				service.saveProduct(product).get();
+			Product product = service.saveProduct(this.mapper.map(writeProductDto, Product.class)).get();
+			if (product != null)
 				return new ResponseEntity<>(product, HttpStatus.CREATED);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+
+			throw new RuntimeException("Unable to add product");
 		}
 		throw new RequestEmptyException("The request should not be empty");
 	}
 
 
 	/**
-	 * Endpoint which delete a specific 
+	 * Endpoint which delete a specific
 	 * product from the database
+	 *
 	 * @param id is the id to the wanted product to delete
-	 *           from the database   
+	 *           from the database
 	 * @return an HTTP response according to the obtained scenario
 	 * @throws Exception in case of bod working of asynchronous methods
 	 */
@@ -75,11 +78,12 @@ public class AdminProductController {
 			}
 		}
 		throw new ProductNotFoundException("The product with id " + id + " was not found");
-	}	
-	
+	}
+
 	/**
 	 * Endpoint which update a specific product
 	 * in the database searched by id
+	 *
 	 * @param id the id of the wanted product to update
 	 * @return an HTTP response according to the obtained scenario
 	 * @throws Exception in case of bod working of asynchronous methods

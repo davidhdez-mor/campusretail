@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.campusretail.orderservice.domain.Order;
 
+import java.util.List;
+import java.util.Optional;
+
 
 /**
  * Interface which extends from JPA
@@ -12,4 +15,5 @@ import com.campusretail.orderservice.domain.Order;
  */
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
+	List<Order> findAllByUserId(Long userId);
 }

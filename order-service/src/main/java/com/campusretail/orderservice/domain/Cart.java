@@ -22,6 +22,8 @@ public class Cart {
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	private Long userId;
 
 	public Cart() {
 

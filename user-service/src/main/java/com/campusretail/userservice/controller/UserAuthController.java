@@ -4,15 +4,14 @@ import com.campusretail.userservice.dto.CredentialsDto;
 import com.campusretail.userservice.dto.ReadUserDto;
 import com.campusretail.userservice.dto.UserLoginDto;
 import com.campusretail.userservice.dto.WriteUserDto;
+import com.campusretail.userservice.exception.UserNotFoundException;
 import com.campusretail.userservice.service.UserService;
+import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.ExecutionException;
 
@@ -31,15 +30,30 @@ public class UserAuthController {
 	}
 
 	@PostMapping("/validateToken")
-	public ResponseEntity<UserLoginDto> signIn(@RequestParam String token)
-			throws ExecutionException,
-			InterruptedException {
-		return ResponseEntity.ok(userService.validateToken(token).get());
+	public ResponseEntity<UserLoginDto> signIn(@RequestParam String token) throws ExecutionException, InterruptedException {
+		UserLoginDto userLoginDto = userService.validateToken(token).get();
+		if (userLoginDto != null)
+			return new ResponseEntity<>(userLoginDto, HttpStatus.OK);
+
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<UserLoginDto> loginUser(@RequestBody CredentialsDto credentialsDto) throws ExecutionException, InterruptedException {
-		return ResponseEntity.ok(userService.signIn(credentialsDto).get());
+		UserLoginDto userLoginDto = userService.signIn(credentialsDto).get();
+		if (userLoginDto != null)
+			return new ResponseEntity<>(userLoginDto, HttpStatus.OK);
+
+		throw new UserNotFoundException("Login failed");
+	}
+	
+	@PostMapping("/guest")
+	public ResponseEntity<UserLoginDto> loginUser() throws ExecutionException, InterruptedException {
+		UserLoginDto userLoginDto = userService.newGuest().get();
+		if (userLoginDto != null)
+			return new ResponseEntity<>(userLoginDto, HttpStatus.OK);
+
+		throw new UserNotFoundException("Login failed");
 	}
 
 	/**
@@ -49,15 +63,11 @@ public class UserAuthController {
 	 * @return HTTP created response, bad request or internal server error in case of an error occurs
 	 */
 	@PostMapping(value = "/registration")
-	public ResponseEntity<ReadUserDto> addUser(@RequestBody WriteUserDto writeUserDto) {
-		try {
-			ReadUserDto readUserDto = userService.saveUserAsync(writeUserDto).get();
+	public ResponseEntity<ReadUserDto> addUser(@RequestBody WriteUserDto writeUserDto) throws ExecutionException, InterruptedException {
+		ReadUserDto readUserDto = userService.saveUserAsync(writeUserDto).get();
+		if (readUserDto != null)
 			return new ResponseEntity<>(readUserDto, HttpStatus.CREATED);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		throw new RuntimeException("User already registered");
 	}
-
 
 }

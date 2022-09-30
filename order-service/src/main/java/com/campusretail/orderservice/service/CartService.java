@@ -1,11 +1,9 @@
 package com.campusretail.orderservice.service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import com.campusretail.orderservice.domain.Cart;
-import com.campusretail.orderservice.domain.Item;
 
 /**
  * Interface with all the needed
@@ -14,11 +12,8 @@ import com.campusretail.orderservice.domain.Item;
  */
 public interface CartService {
 
-    void addItemToCart(Long cartId, Long productId, Integer quantity);
-    CompletableFuture<Optional<Cart>> getCart(Long cartId);
-    void changeItemQuantity(Long cartId, Long productId, Integer quantity);
-    void deleteItemFromCart(Long cartId, Long productId);
-    CompletableFuture<Boolean> checkIfItemExists(Long cartId, Long productId);
-    CompletableFuture<List<Item>> getAllItemsFromCart(Long cartId);
-    void deleteCart(Long cartId);
+    CompletableFuture<Cart> addItemToCart(Long userId, Long productId, Integer quantity) throws InterruptedException, ExecutionException;
+    CompletableFuture<Cart> getCart(Long userId);
+    CompletableFuture<Cart> deleteItemFromCart(Long userId, Long productId);
+    CompletableFuture<Cart> deleteAllItemsFromCart(Long userId);
 }

@@ -60,7 +60,7 @@ public class UserController {
 	@GetMapping(value = "/users", params = "name")
 	public ResponseEntity<ReadUserDto> getUserByName(@RequestParam("name") String userName) throws ExecutionException, InterruptedException{
 		Optional<User> user = userService.getUserByNameAsync(userName).get();
-		if (user != null) {
+		if (user.isPresent()) {
 			ReadUserDto readUserDto = this.modelMapper.map(user, ReadUserDto.class);
 			return new ResponseEntity<>(readUserDto, HttpStatus.OK);
 		}
@@ -75,8 +75,8 @@ public class UserController {
 	 */
 	@GetMapping("/users/{id}")
 	public ResponseEntity<ReadUserDto> getUserById(@PathVariable("id") Long id) throws ExecutionException, InterruptedException {
-		User user = userService.getUserByIdAsync(id).get();
-		if (user != null) {
+		Optional<User> user = userService.getUserByIdAsync(id).get();
+		if (user.isPresent()) {
 			ReadUserDto readUserDto = this.modelMapper.map(user, ReadUserDto.class);
 			return new ResponseEntity<>(readUserDto, HttpStatus.OK);
 		}

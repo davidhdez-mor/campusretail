@@ -19,9 +19,10 @@ import com.campusretail.userservice.entity.User;
 public interface UserService {
     
     CompletableFuture<List<User>> getAllUsersAsync();
-    CompletableFuture<User> getUserByIdAsync(Long id);
+    CompletableFuture<Optional<User>> getUserByIdAsync(Long id);
     CompletableFuture<Optional<User>> getUserByNameAsync(String userName);
     CompletableFuture<ReadUserDto> saveUserAsync(WriteUserDto user);
     CompletableFuture<UserLoginDto> validateToken(String token);
     CompletableFuture<UserLoginDto> signIn(CredentialsDto credentialsDto);
+    CompletableFuture<UserLoginDto> newGuest();
 }
