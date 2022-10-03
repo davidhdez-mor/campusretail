@@ -66,17 +66,14 @@ public class AdminProductController {
 	 * @throws Exception in case of bod working of asynchronous methods
 	 */
 	@DeleteMapping("/products/{id}")
-	private ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws Exception {
-		Product product = service.getProductById(id).get();
-		if (product != null) {
-			try {
-				service.deleteProduct(id);
-				return new ResponseEntity<>(HttpStatus.OK);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		}
+	private ResponseEntity<Void> deleteProduct(@PathVariable Long id, @RequestHeader("X-auth-role") String role) throws Exception {
+		if (!role.equals("Admin"))
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		
+		Product product = service.deleteProduct(id).get();
+		if (product != null)
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		
 		throw new ProductNotFoundException("The product with id " + id + " was not found");
 	}
 
@@ -89,7 +86,9 @@ public class AdminProductController {
 	 * @throws Exception in case of bod working of asynchronous methods
 	 */
 	@PutMapping("/products/{id}")
-	private ResponseEntity<Void> updateProduct(@PathVariable Long id) throws Exception {
+	private ResponseEntity<Void> updateProduct(@PathVariable Long id, @RequestHeader("X-auth-role") String role) throws Exception {
+		if (!role.equals("Admin"))
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		Product product = service.getProductById(id).get();
 		if (product != null)
 			try {

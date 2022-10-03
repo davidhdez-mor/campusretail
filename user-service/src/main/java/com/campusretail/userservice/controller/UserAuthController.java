@@ -6,7 +6,6 @@ import com.campusretail.userservice.dto.UserLoginDto;
 import com.campusretail.userservice.dto.WriteUserDto;
 import com.campusretail.userservice.exception.UserNotFoundException;
 import com.campusretail.userservice.service.UserService;
-import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,15 +45,6 @@ public class UserAuthController {
 
 		throw new UserNotFoundException("Login failed");
 	}
-	
-	@PostMapping("/guest")
-	public ResponseEntity<UserLoginDto> loginUser() throws ExecutionException, InterruptedException {
-		UserLoginDto userLoginDto = userService.newGuest().get();
-		if (userLoginDto != null)
-			return new ResponseEntity<>(userLoginDto, HttpStatus.OK);
-
-		throw new UserNotFoundException("Login failed");
-	}
 
 	/**
 	 * Endpoint to add users into the database
@@ -69,5 +59,4 @@ public class UserAuthController {
 			return new ResponseEntity<>(readUserDto, HttpStatus.CREATED);
 		throw new RuntimeException("User already registered");
 	}
-
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -84,7 +85,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void deleteProduct(Long productId) {
-		productRepository.deleteById(productId);
+	@Async("AsyncExecutor")
+	public CompletableFuture<Product> deleteProduct(Long productId) {
+		Optional<Product> productOptional = productRepository.findById(productId);
+		if (productOptional.isPresent()) {
+			Product product = productOptional.get();
+			product.setAvailability(0);
+			return CompletableFuture.completedFuture(productRepository.save(product));
+		}
+		return CompletableFuture.completedFuture(null);
+			
 	}
 }

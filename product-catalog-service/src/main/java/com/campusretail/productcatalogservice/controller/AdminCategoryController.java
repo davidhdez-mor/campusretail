@@ -32,7 +32,9 @@ public class AdminCategoryController {
 	 * @throws Exception if the service did not complete the request successfully
 	 */
 	@GetMapping("/categories")
-	public ResponseEntity<List<Category>> getAllCategories() throws Exception {
+	public ResponseEntity<List<Category>> getAllCategories(@RequestHeader("X-auth-role") String role) throws Exception {
+		if (!role.equals("Admin"))
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		List<Category> categories = this.service.getCategories().get();
 		if (categories != null) {
 			return new ResponseEntity<>(categories, HttpStatus.OK);
@@ -48,7 +50,9 @@ public class AdminCategoryController {
 	 * @return an HTTP response according to the obtained scenario
 	 */
 	@PostMapping("/categories")
-	public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+	public ResponseEntity<Category> addCategory(@RequestBody Category category, @RequestHeader("X-auth-role") String role) {
+		if (!role.equals("Admin"))
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		if (category != null)
 			try {
 				this.service.saveCategory(category);
@@ -71,12 +75,14 @@ public class AdminCategoryController {
 	 * an exception
 	 */
 	@DeleteMapping("/categories/{id}")
-	public ResponseEntity<Void> deleteCategory(@PathVariable Long id) throws Exception {
+	public ResponseEntity<Void> deleteCategory(@PathVariable Long id, @RequestHeader("X-auth-role") String role) throws Exception {
+		if (!role.equals("Admin"))
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		Category category = this.service.getCategoryById(id).get();
 		if (category != null) {
 			try {
 				this.service.deleteCategory(id);
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,7 +99,9 @@ public class AdminCategoryController {
 	 * @throws Exception in case of bad working of asynchronous methods
 	 */
 	@PutMapping("/categories/{id}")
-	public ResponseEntity<Void> updateCategory(@PathVariable Long id) throws Exception {
+	public ResponseEntity<Void> updateCategory(@PathVariable Long id, @RequestHeader("X-auth-role") String role) throws Exception {
+		if (!role.equals("Admin"))
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		Category category = this.service.getCategoryById(id).get();
 		if (category != null)
 			try {

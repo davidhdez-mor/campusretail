@@ -1,6 +1,16 @@
 # Endpoints for products
 ###
 GET http://localhost:8765/admin/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBRE1JTiIsInJvbGUiOiJBZG1pbiIsImp0aSI6IjIwMDAzIiwiaWF0IjoxNjY0ODMyMDkzLCJleHAiOjE2NjQ4MzU2OTN9.wVJvheJljb3421nWpe2G3rP6g4DrkZb2Ry2gnqwo8DQ
+
+###
+POST http://localhost:8765/admin/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBRE1JTiIsInJvbGUiOiJBZG1pbiIsImp0aSI6IjIwMDAzIiwiaWF0IjoxNjY0ODMyMDkzLCJleHAiOjE2NjQ4MzU2OTN9.wVJvheJljb3421nWpe2G3rP6g4DrkZb2Ry2gnqwo8DQ
+Content-Type: application/json
+
+{
+  "category": "Speakers"
+}
 
 ###
 GET http://localhost:8765/products/3
@@ -17,6 +27,7 @@ GET http://localhost:8765/products
 ###
 POST http://localhost:8765/admin/products
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBRE1JTiIsInJvbGUiOiJBZG1pbiIsImp0aSI6IjIwMDAzIiwiaWF0IjoxNjY0ODMyMDkzLCJleHAiOjE2NjQ4MzU2OTN9.wVJvheJljb3421nWpe2G3rP6g4DrkZb2Ry2gnqwo8DQ
 
 {
   "productName": "Monitor pirata",
@@ -34,6 +45,11 @@ Content-Type: application/json
 }
 
 ###
+DELETE http://localhost:8765/admin/products/10002
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBRE1JTiIsInJvbGUiOiJBZG1pbiIsImp0aSI6IjIwMDAzIiwiaWF0IjoxNjY0ODMyMDkzLCJleHAiOjE2NjQ4MzU2OTN9.wVJvheJljb3421nWpe2G3rP6g4DrkZb2Ry2gnqwo8DQ
+
+###
 # Endpoints for user
 GET http://localhost:8765/users
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyNDI2NCwiZXhwIjoxNjY0ODI3ODY0fQ.uzrIwojpjNAdiwcr_3BzipHSqapGl0OdLWLgAcdz_nk
@@ -46,8 +62,8 @@ POST http://localhost:8765/registration
 Content-Type: application/json
 
 {
-  "userName": "Vincent",
-  "userPassword": "cbrpnkftw"
+  "userName": "ADMIN",
+  "userPassword": "MySuperSafePassword#"
 }
 
 ###
@@ -55,8 +71,8 @@ POST http://localhost:8765/login
 Content-Type: application/json
 
 {
-  "username": "Vincent",
-  "password": "cbrpnkftw"
+  "username": "ADMIN",
+  "password": "MySuperSafePassword#"
 }
 
 

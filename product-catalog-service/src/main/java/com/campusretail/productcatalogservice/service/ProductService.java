@@ -16,5 +16,5 @@ public interface ProductService {
     CompletableFuture<Product> getProductById(Long id);
     CompletableFuture<List<Product>> getAllProductsByName(String name);
     CompletableFuture<Product> saveProduct(Product product);
-    void deleteProduct(Long productId);
+    CompletableFuture<Product> deleteProduct(Long productId);
 }
