@@ -13,7 +13,7 @@ import com.campusretail.orderservice.domain.Cart;
 public interface CartService {
 
     CompletableFuture<Cart> addItemToCart(Long userId, Long productId, Integer quantity) throws InterruptedException, ExecutionException;
-    CompletableFuture<Cart> getCart(Long userId);
+    CompletableFuture<Cart> getCart(Long userId) throws ExecutionException, InterruptedException;
     CompletableFuture<Cart> deleteItemFromCart(Long userId, Long productId);
     CompletableFuture<Cart> deleteAllItemsFromCart(Long userId);
 }

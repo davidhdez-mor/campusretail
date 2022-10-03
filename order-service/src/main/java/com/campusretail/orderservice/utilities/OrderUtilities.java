@@ -20,9 +20,10 @@ public class OrderUtilities {
         return total;
     }
     
-   public static Order createOrder(Cart cart, User user) {
+   public static Order createOrder(Cart cart, List<Item> items, User user) {
         Order order = new Order();
         order.setCart(cart);
+        order.setItems(items);
         order.setUser(user);
         order.setTotal(OrderUtilities.countTotalPrice(cart.getItems()));
         order.setOrderedDate(LocalDate.now());

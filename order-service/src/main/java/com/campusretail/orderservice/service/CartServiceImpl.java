@@ -3,21 +3,25 @@ package com.campusretail.orderservice.service;
 import com.campusretail.orderservice.domain.Cart;
 import com.campusretail.orderservice.domain.Item;
 import com.campusretail.orderservice.domain.Product;
-import com.campusretail.orderservice.exception.CartNotFoundException;
+import com.campusretail.orderservice.domain.User;
 import com.campusretail.orderservice.feignclient.ProductClient;
+import com.campusretail.orderservice.feignclient.UserClient;
 import com.campusretail.orderservice.repository.CartRepository;
-import com.campusretail.orderservice.utilities.CartUtilities;
+import com.campusretail.orderservice.repository.ItemRepository;
+import com.campusretail.orderservice.repository.ProductRepository;
+import com.campusretail.orderservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
+
+import static com.campusretail.orderservice.utilities.CartUtilities.getSubTotalForItem;
 
 //TODO: check if the methods works as intended
 
@@ -33,46 +37,64 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
 	private final ProductClient productClient;
-
 	private final CartRepository cartRepository;
+	private final UserRepository userRepository;
+	private final UserClient userClient;
+	private final ItemRepository itemRepository;
+	private final ProductRepository productRepository;
 
 	@Autowired
-	public CartServiceImpl(CartRepository cartRepository, ProductClient productClient) {
+	public CartServiceImpl(CartRepository cartRepository,
+	                       ProductClient productClient, ProductRepository productRepository,
+	                       UserRepository userRepository, UserClient userClient,
+	                       ItemRepository itemRepository) {
 		this.cartRepository = cartRepository;
 		this.productClient = productClient;
+		this.productRepository = productRepository;
+		this.userRepository = userRepository;
+		this.userClient = userClient;
+		this.itemRepository = itemRepository;
 	}
 
 	@Override
 	@Async("asyncExecutor")
 	public CompletableFuture<Cart> addItemToCart(Long userId, Long productId, Integer quantity) throws InterruptedException, ExecutionException {
-		Optional<Cart> optionalCart = cartRepository.findCartByUserId(userId);
-		if (optionalCart.isPresent()) {
-			Cart cart = optionalCart.get();
-			List<Item> items = cart.getItems();
+		Cart cart = getCart(userId).get();
+		List<Item> items = cart.getItems();
 
-			Product product = productClient.getProductById(productId);
-			Item item = new Item(quantity, CartUtilities.getSubTotalForItem(product, quantity), product);
+		Product product = productClient.getProductById(productId);
+		BigDecimal subTotal = getSubTotalForItem(product, quantity);
+		Item item = new Item(quantity, subTotal, product);
 
-			if (checkIfItemExists(cart, productId).get())
-				items.forEach(i -> {
-					if (i.getProduct().getId().equals(productId))
-						i.setQuantity(quantity);
-				});
-			else
-				items.add(item);
-
-			cart.setItems(items);
-			return CompletableFuture.completedFuture(cartRepository.save(cart));
+		if (checkIfItemExists(items, productId).get())
+			items.forEach(i -> {
+				if (i.getProduct().getId().equals(productId)) {
+					i.setQuantity(quantity);
+					i.setSubTotal(subTotal);
+				}
+				
+			});
+		else {
+			productRepository.save(product);
+			itemRepository.save(item);
+			items.add(item);
 		}
-		return CompletableFuture.completedFuture(null);
+
+		cart.setItems(items);
+		return CompletableFuture.completedFuture(cartRepository.save(cart));
 	}
 
 	@Override
 	@Async("asyncExecutor")
 	public CompletableFuture<Cart> getCart(Long userId) {
 		Optional<Cart> optionalCart = cartRepository.findCartByUserId(userId);
-		return optionalCart.map(CompletableFuture::completedFuture)
-				.orElseGet(() -> CompletableFuture.completedFuture(null));
+		if (optionalCart.isPresent())
+			return CompletableFuture.completedFuture(optionalCart.get());
+
+		User user = userClient.getUserById(userId);
+		Cart cart = new Cart();
+		cart.setUser(userRepository.save(user));
+		return CompletableFuture.completedFuture(cartRepository.save(cart));
 	}
 
 	@Override
@@ -90,12 +112,12 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Async("asyncExecutor")
-	public CompletableFuture<Boolean> checkIfItemExists(Cart cart, Long productId) {
-		return CompletableFuture.completedFuture(cart.getItems()
+	public CompletableFuture<Boolean> checkIfItemExists(List<Item> items, Long productId) {
+		return CompletableFuture.completedFuture(items
 				.stream()
 				.anyMatch(item -> item.getProduct().getId().equals(productId)));
 	}
-	
+
 	@Override
 	@Async("asyncExecutor")
 	public CompletableFuture<Cart> deleteAllItemsFromCart(Long userId) {

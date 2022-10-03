@@ -1,11 +1,9 @@
 package com.campusretail.orderservice.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Product entity class with all the 
@@ -18,22 +16,26 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long productId;
-
-    @Transient
     private Long id;
 
     @Column (name = "product_name")
     @NotNull
     private String productName;
+    
+    
     @Column (name = "price")
     @NotNull
     private BigDecimal price;
 
-    @OneToMany (mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Item> items;
+    public Product() {
+        
+    }
+
+    public Product(Long id, String productName, BigDecimal price) {
+        this.id = id;
+        this.productName = productName;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
@@ -57,13 +59,5 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
     }
 }

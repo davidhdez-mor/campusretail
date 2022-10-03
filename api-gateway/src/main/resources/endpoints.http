@@ -36,7 +36,7 @@ Content-Type: application/json
 ###
 # Endpoints for user
 GET http://localhost:8765/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDU3NTA5NiwiZXhwIjoxNjY0NTc4Njk2fQ.PFfnpODPU_yMKxffdl43AWmsrWkNrmauY1W7xjUg0DE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyNDI2NCwiZXhwIjoxNjY0ODI3ODY0fQ.uzrIwojpjNAdiwcr_3BzipHSqapGl0OdLWLgAcdz_nk
 
 ###
 GET http://localhost:8765/users?name=Romana
@@ -59,4 +59,34 @@ Content-Type: application/json
   "password": "cbrpnkftw"
 }
 
+
 ###
+# Endpoints for Cart
+GET http://localhost:8765/cart
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyOTUwOSwiZXhwIjoxNjY0ODMzMTA5fQ.htNY04T8XfoJvThn4EixBA1SG9vZbubRJDDpOOq9OYk
+
+###
+# Endpoint para agregar items al carrito
+POST http://localhost:8765/cart?productId=1&quantity=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyOTUwOSwiZXhwIjoxNjY0ODMzMTA5fQ.htNY04T8XfoJvThn4EixBA1SG9vZbubRJDDpOOq9OYk
+
+###
+# Remover item en especifico del carrito
+DELETE http://localhost:8765/cart?productId=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyNTY3OCwiZXhwIjoxNjY0ODI5Mjc4fQ.v_8hORdzUKIWApkU8A_iZmSsM_Osp1MC47QHbQVEiWk
+
+###
+# Remover todos los items del carrito
+DELETE http://localhost:8765/cart
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyNTY3OCwiZXhwIjoxNjY0ODI5Mjc4fQ.v_8hORdzUKIWApkU8A_iZmSsM_Osp1MC47QHbQVEiWk
+
+###
+# Endpoints for orders
+
+###
+GET http://localhost:8765/order
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyOTUwOSwiZXhwIjoxNjY0ODMzMTA5fQ.htNY04T8XfoJvThn4EixBA1SG9vZbubRJDDpOOq9OYk
+
+###
+POST http://localhost:8765/order
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWaW5jZW50Iiwicm9sZSI6IlVzZXIiLCJqdGkiOiIxMDAwMiIsImlhdCI6MTY2NDgyOTUwOSwiZXhwIjoxNjY0ODMzMTA5fQ.htNY04T8XfoJvThn4EixBA1SG9vZbubRJDDpOOq9OYk

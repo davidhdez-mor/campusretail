@@ -15,7 +15,7 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	//@JoinTable (name = "cart" , joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn (name = "item_id"))
 	private List<Item> items;
 
@@ -23,7 +23,7 @@ public class Cart {
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	private Long userId;
+//	private Long userId;
 
 	public Cart() {
 

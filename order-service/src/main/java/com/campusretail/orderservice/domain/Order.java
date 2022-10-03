@@ -1,10 +1,16 @@
 package com.campusretail.orderservice.domain;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Order entity class with all the 
@@ -37,18 +43,24 @@ public class Order {
 	@ManyToOne
 	@JoinColumn (name = "cart_id")
 	private Cart cart;
+
+	@OneToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
+	//@JoinTable (name = "cart" , joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn (name = "item_id"))
+	private List<Item> items;
 	
 	public Order() {
 		
 	}
 
-	public Order(Long id, LocalDate orderedDate, Status status, BigDecimal total, User user, Cart cart) {
+	public Order(Long id, LocalDate orderedDate, Status status, BigDecimal total, User user, Cart cart, List<Item> items) {
 		this.id = id;
 		this.orderedDate = orderedDate;
 		this.status = status;
 		this.total = total;
 		this.user = user;
 		this.cart = cart;
+		this.items = items;
 	}
 
 	public Long getId() {
@@ -97,5 +109,13 @@ public class Order {
 
 	public void setCart(Cart cart) {
 		this.cart = cart;
+	}
+
+	public List<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 }

@@ -1,11 +1,9 @@
 package com.campusretail.orderservice.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Item entity class with all the 
@@ -18,7 +16,7 @@ public class Item {
 	
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @JsonIgnore
+    //@JsonIgnore
     private Long id;
 
     @Column (name = "quantity")
@@ -30,7 +28,7 @@ public class Item {
     @NotNull
     private BigDecimal subTotal;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn (name = "product_id")
     private Product product;
 

@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -46,10 +47,13 @@ public class OrderServiceImpl implements OrderService {
 			Cart cart = optionalCart.get();
 			User user = cart.getUser();
 			List<Item> items = cart.getItems();
+			LinkedList<Item> linkedItems = new LinkedList<>(items);
+			Order order = orderRepository.save(createOrder(cart, linkedItems, user));
+			
 			items.clear();
 			cart.setItems(items);
-			cart = cartRepository.save(cart);
-			return CompletableFuture.completedFuture(orderRepository.save(createOrder(cart, user)));
+			cartRepository.save(cart);
+			return CompletableFuture.completedFuture(order);
 		}
 		return CompletableFuture.completedFuture(null);
 	}
