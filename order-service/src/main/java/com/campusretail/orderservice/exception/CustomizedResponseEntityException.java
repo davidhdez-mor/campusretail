@@ -1,7 +1,5 @@
 package com.campusretail.orderservice.exception;
 
-import com.campusretail.orderservice.domain.Cart;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +45,7 @@ public class CustomizedResponseEntityException extends ResponseEntityExceptionHa
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(UnableToAddItemException.class)
+	@ExceptionHandler(UnableToRemoveItemException.class)
 	public final ResponseEntity<ErrorDetails> handleUnableToRemoveItemException(Exception ex, WebRequest request) {
 		ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
 				ex.getMessage(), request.getDescription(false));

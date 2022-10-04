@@ -38,7 +38,7 @@ public class CartController {
 	 * @return a collection of all the items of the cart
 	 */
 	@GetMapping(value = "/cart")
-	public ResponseEntity<List<Item>> getCart(@RequestHeader("X-auth-role") String role, @RequestHeader("X-auth-user-id") Long userId) throws InterruptedException, ExecutionException {
+	public ResponseEntity<List<Item>> getCart(@RequestHeader("X-auth-user-id") Long userId) throws InterruptedException, ExecutionException {
 		Cart cart = cartService.getCart(userId).get();
 		if (cart != null)
 			return new ResponseEntity<>(cart.getItems(), HttpStatus.OK);

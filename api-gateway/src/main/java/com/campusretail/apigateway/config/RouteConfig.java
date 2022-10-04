@@ -47,7 +47,7 @@ public class RouteConfig {
 														new AuthenticationFilter.Config())
 												)
 												.rewritePath("/order/(?<segment>.*)", "/order/${segment}"))
-								.uri("lb://order-service/order"))
+								.uri("lb://order-service/order/"))
 				.route(fn ->
 						fn.path("/login")
 								.uri("lb://user-service/login"))
